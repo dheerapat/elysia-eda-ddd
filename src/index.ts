@@ -36,6 +36,7 @@ const app = new Elysia()
   .decorate("unitOfWork", unitOfWork)
   .use(eventHandler)
   .use(userPlugin)
+  .get("/health", () => ({ status: "ok" }))
   .listen(3000);
 
 console.log(`[app] Listening on http://localhost:${app.server?.port}`);
