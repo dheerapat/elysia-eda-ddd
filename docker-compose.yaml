@@ -1,0 +1,39 @@
+services:
+  postgres:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: postgres
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  app:
+    build: .
+    environment:
+      DATABASE_URL: postgres://admin:pass@postgres:5432/postgres
+      PGBOSS_MAX_CONNECTIONS: "10"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    deploy:
+      replicas: 6
+
+  caddy:
+    image: caddy:2
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - app
+
+volumes:
+  postgres-data:
+    driver: local

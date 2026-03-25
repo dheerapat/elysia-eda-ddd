@@ -1,0 +1,19 @@
+{
+  "name": "bkkjs-demo",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "^1.3.11"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@types/pg": "^8.20.0",
+    "elysia": "^1.4.28",
+    "kysely": "^0.28.14",
+    "pg": "^8.20.0",
+    "pg-boss": "^12.14.0"
+  }
+}
