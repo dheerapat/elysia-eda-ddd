@@ -229,7 +229,7 @@ POST /user/register
 ### Infrastructure layer highlights
 
 - **`KyselyUnitOfWork`** is the orchestrator of the transactional outbox. It wraps a Kysely transaction and injects a transaction-scoped proxy of the event bus into the use case callback. The proxy intercepts `publish()` and adds the `{ db }` option so that pg-boss writes its job row through the open transaction.
-- **`KyselyAdapter`** is a small bridge that implements `IDbClient` by delegating `executeSql()` to Kysely's raw query runner, allowing the domain-level `IDbClient` interface to be satisfied without exposing Kysely types to the domain.
+- **`KyselyAdapter`** is a small bridge that implements `IDbClient` by delegating `executeSql()` to Kysely's raw query runner, allowing the domain-level `IDbClient` interface to be satisfied without exposing Kysely types to the domain. It is also used as pg-boss's `db` adapter at startup, so pg-boss shares the same connection pool managed by Kysely instead of creating a separate `pg.Pool`.
 - **`UserRepository`** accepts `Kysely<Database> | Transaction<Database>`, so the same class works both inside and outside a unit of work without any special-casing.
 
 ---
